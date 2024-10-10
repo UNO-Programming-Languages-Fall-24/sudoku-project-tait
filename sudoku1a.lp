@@ -1,22 +1,26 @@
-% The grid is filled with numbers 1 to 4, and each number appears exactly once in each row, column, and subgrid.
+% Sudoku Solver
 
-% Define the grid size and possible numbers
+% Define the domain: the grid is 4x4 and the values are from 1 to 4
 num(1..4).
 row(1..4).
 col(1..4).
 
-% A valid number must be placed in each cell of the grid
-1 { sudoku(X, Y, N) : num(N) } 1 :- row(X), col(Y).
+% Load initial clues from the file
+sudoku(R, C, V) :- initial(R, C, V).
 
-% Row constraint: each number appears exactly once in each row
-:- sudoku(X, Y1, N), sudoku(X, Y2, N), Y1 != Y2, num(N).
+% Define the input: known cells are pre-filled, others are guessed
+1 { sudoku(R, C, V) : num(V) } 1 :- row(R), col(C), not initial(R, C, _).
 
-% Column constraint: each number appears exactly once in each column
-:- sudoku(X1, Y, N), sudoku(X2, Y, N), X1 != X2, num(N).
+% Sudoku constraints
+:- sudoku(R, C1, V), sudoku(R, C2, V), C1 != C2.  % Row constraint: no duplicates
+:- sudoku(R1, C, V), sudoku(R2, C, V), R1 != R2.  % Column constraint: no duplicates
 
-% Subgrid constraint: each number appears exactly once in each 2x2 subgrid
-:- sudoku(X1, Y1, N), sudoku(X2, Y2, N), X1 != X2, Y1 != Y2,
-   (1 + ((X1 - 1) / 2) * 2 + (Y1 - 1) / 2) == (1 + ((X2 - 1) / 2) * 2 + (Y2 - 1) / 2), num(N).
+% Subgrid constraint: no duplicates in each 2x2 block
+:- sudoku(R1, C1, V), sudoku(R2, C2, V),
+   (R1 - 1) / 2 == (R2 - 1) / 2, (C1 - 1) / 2 == (C2 - 1) / 2, (R1, C1) != (R2, C2).
 
-% Show the sudoku solution
+% The hints can be defined using the input predicate
+input(R, C, V) :- sudoku(R, C, V).
+
+
 #show sudoku/3.
