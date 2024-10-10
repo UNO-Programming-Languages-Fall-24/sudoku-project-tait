@@ -26,10 +26,10 @@ subgrid(3,1,3). subgrid(3,2,3). subgrid(4,1,3). subgrid(4,2,3). % Subgrid 3
 subgrid(3,3,4). subgrid(3,4,4). subgrid(4,3,4). subgrid(4,4,4). % Subgrid 4
 
 % Ensure every number between 1 and 4 appears exactly once per row
-:- row(R), num(V), not 1 { sudoku(R, _, V) } 1.
+:- row(R), num(V), not 1 { sudoku(R, C, V) } 1.
 
 % Ensure every number between 1 and 4 appears exactly once per column
-:- col(C), num(V), not 1 { sudoku(_, C, V) } 1.
+:- col(C), num(V), not 1 { sudoku(R, C, V) } 1.
 
 % Ensure every number between 1 and 4 appears exactly once per subgrid
 :- subgrid(R, C, G), num(V), not 1 { sudoku(R, C, V) : subgrid(R, C, G) } 1.
