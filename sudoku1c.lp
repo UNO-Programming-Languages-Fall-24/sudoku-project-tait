@@ -5,6 +5,12 @@ num(1..4).
 row(1..4).
 col(1..4).
 
+% Define subgrid mapping
+subgrid(1, 1, 1). subgrid(1, 2, 1). subgrid(1, 3, 2). subgrid(1, 4, 2). %Top Left
+subgrid(2, 1, 1). subgrid(2, 2, 1). subgrid(2, 3, 2). subgrid(2, 4, 2). %Top Right
+subgrid(3, 1, 3). subgrid(3, 2, 3). subgrid(3, 3, 4). subgrid(3, 4, 4). %Bottom Left
+subgrid(4, 1, 3). subgrid(4, 2, 3). subgrid(4, 3, 4). subgrid(4, 4, 4). %Bottom Right
+
 % Load initial clues from the file
 sudoku(R, C, V) :- initial(R, C, V).
 
@@ -17,22 +23,13 @@ sudoku(R, C, V) :- initial(R, C, V).
 
 % Subgrid constraint: no duplicates in each 2x2 block
 :- sudoku(R1, C1, V), sudoku(R2, C2, V),
-   ubgrid(R1, C1, G), ubgrid(R2, C2, G), (R1, C1) != (R2, C2).
+   subgrid(R1, C1, G), subgrid(R2, C2, G), (R1, C1) != (R2, C2).
 
-% Define subgrid mapping
-subgrid(1, 1, 1). subgrid(1, 2, 1). subgrid(1, 3, 2). subgrid(1, 4, 2). %Top Left
-subgrid(2, 1, 1). subgrid(2, 2, 1). subgrid(2, 3, 2). subgrid(2, 4, 2). %Top Right
-subgrid(3, 1, 3). subgrid(3, 2, 3). subgrid(3, 3, 4). subgrid(3, 4, 4). %Bottom Left
-subgrid(4, 1, 3). subgrid(4, 2, 3). subgrid(4, 3, 4). subgrid(4, 4, 4). %Bottom Right
+ % Ensure each number appears exactly once per row
+:- num(V), row(R), #count{C : sudoku(R,C,V)} != 1.
 
-% Ensure every number between 1 and 4 appears exactly once per row
-:- row(R), num(V), not 1 { sudoku(R, C, V) } 1.
-
-% Ensure every number between 1 and 4 appears exactly once per column
-:- col(C), num(V), not 1 { sudoku(R, C, V) } 1.
-
-% Ensure every number between 1 and 4 appears exactly once per subgrid
-:- subgrid(R, C, G), num(V), not 1 { sudoku(R, C, V) : subgrid(R, C, G) } 1.
-
-% Show only the sudoku/3 and subgrid/3 predicates in the output
+% Ensure each number appears exactly once per column
+:- num(V), col(C), #count{R : sudoku(R,C,V)} != 1.
+  
+% Show only the sudoku
 #show sudoku/3.
