@@ -17,13 +17,13 @@ sudoku(R, C, V) :- initial(R, C, V).
 
 % Subgrid constraint: no duplicates in each 2x2 block
 :- sudoku(R1, C1, V), sudoku(R2, C2, V),
-   subgrid(R1, C1, G), subgrid(R2, C2, G), (R1, C1) != (R2, C2).
+   ubgrid(R1, C1, G), ubgrid(R2, C2, G), (R1, C1) != (R2, C2).
 
-% Subgrid definition: 1 for top-left, 2 for top-right, 3 for bottom-left, 4 for bottom-right
-subgrid(1,1,1). subgrid(1,2,1). subgrid(2,1,1). subgrid(2,2,1). % Subgrid 1
-subgrid(1,3,2). subgrid(1,4,2). subgrid(2,3,2). subgrid(2,4,2). % Subgrid 2
-subgrid(3,1,3). subgrid(3,2,3). subgrid(4,1,3). subgrid(4,2,3). % Subgrid 3
-subgrid(3,3,4). subgrid(3,4,4). subgrid(4,3,4). subgrid(4,4,4). % Subgrid 4
+% Define subgrid mapping
+subgrid(1, 1, 1). subgrid(1, 2, 1). subgrid(1, 3, 2). subgrid(1, 4, 2). %Top Left
+subgrid(2, 1, 1). subgrid(2, 2, 1). subgrid(2, 3, 2). subgrid(2, 4, 2). %Top Right
+subgrid(3, 1, 3). subgrid(3, 2, 3). subgrid(3, 3, 4). subgrid(3, 4, 4). %Bottom Left
+subgrid(4, 1, 3). subgrid(4, 2, 3). subgrid(4, 3, 4). subgrid(4, 4, 4). %Bottom Right
 
 % Ensure every number between 1 and 4 appears exactly once per row
 :- row(R), num(V), not 1 { sudoku(R, C, V) } 1.
@@ -36,4 +36,3 @@ subgrid(3,3,4). subgrid(3,4,4). subgrid(4,3,4). subgrid(4,4,4). % Subgrid 4
 
 % Show only the sudoku/3 and subgrid/3 predicates in the output
 #show sudoku/3.
-#show subgrid/3.

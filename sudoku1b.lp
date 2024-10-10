@@ -5,6 +5,12 @@ num(1..4).
 row(1..4).
 col(1..4).
 
+% Define subgrid mapping
+subgrid(1, 1, 1). subgrid(1, 2, 1). subgrid(1, 3, 2). subgrid(1, 4, 2). %Top Left
+subgrid(2, 1, 1). subgrid(2, 2, 1). subgrid(2, 3, 2). subgrid(2, 4, 2). %Top Right
+subgrid(3, 1, 3). subgrid(3, 2, 3). subgrid(3, 3, 4). subgrid(3, 4, 4). %Bottom Left
+subgrid(4, 1, 3). subgrid(4, 2, 3). subgrid(4, 3, 4). subgrid(4, 4, 4). %Bottom Right
+
 % Load initial clues from the file
 sudoku(R, C, V) :- initial(R, C, V).
 
@@ -17,14 +23,9 @@ sudoku(R, C, V) :- initial(R, C, V).
 
 % Subgrid constraint: no duplicates in each 2x2 block
 :- sudoku(R1, C1, V), sudoku(R2, C2, V),
-   subgrid(R1, C1, G), subgrid(R2, C2, G), (R1, C1) != (R2, C2).
+   rubgrid(R1, C1, G), rubgrid(R2, C2, G), (R1, C1) != (R2, C2).
 
-% Define the subgrids: each cell belongs to a subgrid 1, 2, 3, or 4
-subgrid(R, C, 1) :- row(R), col(C), R <= 2, C <= 2.  % Top-left subgrid
-subgrid(R, C, 2) :- row(R), col(C), R <= 2, C > 2.   % Top-right subgrid
-subgrid(R, C, 3) :- row(R), col(C), R > 2, C <= 2.   % Bottom-left subgrid
-subgrid(R, C, 4) :- row(R), col(C), R > 2, C > 2.    % Bottom-right subgrid
 
-% Show the subgrid predicates first, then the sudoku predicates
-#show subgrid/3.
+% Show only the sudoku
 #show sudoku/3.
+#show subgrid/3.
