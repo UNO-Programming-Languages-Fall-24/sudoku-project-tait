@@ -5,17 +5,17 @@ num(1..4).
 row(1..4).
 col(1..4).
 
-% Define the subgrids: each cell belongs to a subgrid 1, 2, 3, or 4
-subgrid(R, C, 1) :- row(R), col(C), R <= 2, C <= 2.  % Top-left subgrid
-subgrid(R, C, 2) :- row(R), col(C), R <= 2, C > 2.   % Top-right subgrid
-subgrid(R, C, 3) :- row(R), col(C), R > 2, C <= 2.   % Bottom-left subgrid
-subgrid(R, C, 4) :- row(R), col(C), R > 2, C > 2.    % Bottom-right subgrid
-
 % Load initial clues from the file
 sudoku(R, C, V) :- initial(R, C, V).
 
 % Define the input: known cells are pre-filled, others are guessed
 1 { sudoku(R, C, V) : num(V) } 1 :- row(R), col(C), not initial(R, C, _).
+
+% Define the subgrids: each cell belongs to a subgrid 1, 2, 3, or 4
+subgrid(R, C, 1) :- row(R), col(C), R <= 2, C <= 2.  % Top-left subgrid
+subgrid(R, C, 2) :- row(R), col(C), R <= 2, C > 2.   % Top-right subgrid
+subgrid(R, C, 3) :- row(R), col(C), R > 2, C <= 2.   % Bottom-left subgrid
+subgrid(R, C, 4) :- row(R), col(C), R > 2, C > 2.    % Bottom-right subgrid
 
 % Sudoku constraints
 :- sudoku(R, C1, V), sudoku(R, C2, V), C1 != C2.  % Row constraint: no duplicates
@@ -25,6 +25,6 @@ sudoku(R, C, V) :- initial(R, C, V).
 :- sudoku(R1, C1, V), sudoku(R2, C2, V),
    subgrid(R1, C1, G), subgrid(R2, C2, G), (R1, C1) != (R2, C2).
 
-% Show only the sudoku/3 and subgrid/3 predicates in the output
-#show sudoku/3.
+% Show the subgrid predicates first, then the sudoku predicates
 #show subgrid/3.
+#show sudoku/3.
