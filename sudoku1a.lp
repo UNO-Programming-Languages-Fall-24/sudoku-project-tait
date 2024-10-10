@@ -17,10 +17,7 @@ sudoku(R, C, V) :- initial(R, C, V).
 
 % Subgrid constraint: no duplicates in each 2x2 block
 :- sudoku(R1, C1, V), sudoku(R2, C2, V),
-   (R1 - 1) / 2 == (R2 - 1) / 2, (C1 - 1) / 2 == (C2 - 1) / 2, (R1, C1) != (R2, C2).
+   subgrid(R1, C1, G), subgrid(R2, C2, G), (R1, C1) != (R2, C2).
 
-% The hints can be defined using the input predicate
-input(R, C, V) :- sudoku(R, C, V).
-
-
+% Show only the sudoku/3 and subgrid/3 predicates in the output
 #show sudoku/3.
